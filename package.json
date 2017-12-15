@@ -1,0 +1,18 @@
+{
+  "name": "my-react-app",
+  "version": "1.0.0",
+  "description": "",
+  "main": "main.js",
+  "scripts": {
+    "test": "./node_modules/.bin/mocha --reporter spec"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "chai": "^4.1.2",
+    "express": "^4.16.2",
+    "mocha": "^4.0.1",
+    "nodemon": "^1.12.5",
+    "reactjs": "^1.0.0"
+  }
+}
