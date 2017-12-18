@@ -1,5 +1,6 @@
 const express = require('express');
 const hbs = require('hbs');
+const mongoconnect = require('./app/mongodb-connect.js');
 
 var app = express();
 var port = 3000;
@@ -17,5 +18,7 @@ app.get('/', (req,res) => {
 
 
 app.listen(port);
+
+mongoconnect.connect();
 
 console.log("listening on port " + port);
