@@ -16,12 +16,13 @@
     "concurrently": "^3.5.1",
     "express": "^4.16.2",
     "hbs": "^4.0.1",
-    "mongodb": "^3.0.0-rc0",
-    "nodemon": "^1.12.5",
+    "jsonwebtoken": "^8.1.0",
+    "mongodb": "^3.0.1",
+    "nodemon": "^1.14.11",
     "reactjs": "^1.0.0"
   },
   "devDependencies": {
-    "mocha": "^4.0.1",
-    "chai": "^4.1.2"
+    "chai": "^4.1.2",
+    "mocha": "^4.1.0"
   }
 }
