@@ -21,16 +21,8 @@
     "url": "https://github.com/JacobRMiller/my-react-app/issues"
   },
   "homepage": "https://github.com/JacobRMiller/my-react-app#readme",
-    "name": "client",
-    "version": "0.1.0",
-    "private": true,
-    "dependencies": {
-        "express": "^4.16.2",
-        "express-graphql": "^0.6.12",
-        "graphql": "^0.13.1"
-    },
-    "scripts": {
-      "start":"cd server/client && npm run start",
-      "test":"mocha"
-    }  
+  "scripts": {
+    "start": "cd server/client && npm run start",
+    "test": "mocha"
+  }
 }
