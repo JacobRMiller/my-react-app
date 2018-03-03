@@ -8,9 +8,13 @@ class App extends Component {
   render() {
     return (
       <div className="App">
+       
         <div class="stars"></div>
         <div class="twinkling"></div> 
         <div class="clouds"></div>
+        <section class="animation-box">
+        <div class="copy-text">metaverse</div>
+        </section>
       </div>
     );
   }
