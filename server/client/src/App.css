@@ -158,7 +158,7 @@ body {
   opacity: 0;
   color: #ffffff;
   animation-name: fadeIn;
-  animation-duration: 2s;
+  animation-duration: 6s;
   z-index: 99;
   font-family: Helvetica, sans-serif;
 }
