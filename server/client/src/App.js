@@ -13,7 +13,7 @@ class App extends Component {
         <div class="twinkling"></div> 
         <div class="clouds"></div>
         <section class="animation-box">
-        <div class="copy-text">metaverse</div>
+        <div class="copy-text">() => {`{mtcx}`} </div>
         </section>
       </div>
     );
