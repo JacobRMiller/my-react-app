@@ -30,10 +30,7 @@
         "graphql": "^0.13.1"
     },
     "scripts": {
-        "start": "node index.js",
-        "server": "nodemon index.js",
-        "client": "npm run start --prefix client",
-        "dev": "concurrently \"npm run server\" \"npm run client",
-        "test":"mocha"
+      "start":"cd server/client && npm run start",
+      "test":"mocha"
     }  
 }
