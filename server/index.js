@@ -2,29 +2,23 @@ const express = require('express');
 const app = express();
 const graphqlHTTP = require('express-graphql');
 // Imports the Google Cloud client library
-const BigQuery = require('@google-cloud/bigquery');
 
 
 
-// Your Google Cloud Platform project ID
 const projectId = 'metacx-prototype-a-196818';
+const topicName = 'projects/metacx-prototype-a-196818/topics/jupiter';
 
-// Creates a client
+const PubSub = require(`@google-cloud/pubsub`);
+const pubsub = new PubSub({
+    projectId: projectId
+});
+
+const BigQuery = require('@google-cloud/bigquery');
 const bigquery = new BigQuery({
     projectId: projectId,
 });
 const dataset = bigquery.dataset('metacx');
 const table = dataset.table('jupiter');
-
-
-table.insert({
-    count: 3,
-    eventDateTime: '2016-12-17T17:16:27',
-    eventName: 'jupiter1',
-    userid: 'jake'
-}, insertHandler);
-
-
 
 const { graphql, buildSchema } = require('graphql');
 
@@ -32,28 +26,72 @@ const { graphql, buildSchema } = require('graphql');
 var schema = buildSchema(`
   type Query {
     hello: String
-    test: String
   }
+  
+  input MessageInput {
+    count: Int,
+    eventDateTime: String,
+    eventName: String,
+    userid: String
+  }
+  
+  type Mutation {
+    setMessage(input: MessageInput) : String
+  }
+  
 `);
 
 // The root provides a resolver function for each API endpoint
 var root = {
-    hello: () => {
+    hello: () => {},
+    setMessage: ({input}) => {
+
+        const data = JSON.stringify(input);
+
+        const dataBuffer = Buffer.from(data);
+
+        pubsub
+            .topic(topicName)
+            .publisher()
+            .publish(dataBuffer)
+            .then(results => {
+                const messageId = results[0];
+                console.log(`Message ${messageId} published.`);
+            })
+            .catch(err => {
+                console.error('ERROR:', err);
+            });
 
 
-        table.insert({
-            count: 1,
-            eventDateTime: "2012-04-23T18:25:43.511Z",
-            eventName: "jupiter",
-            userid: "jake"
-        }, insertHandler);
-
-        return 'Hello world!';
-    },
-    test: () => {
-        return "this is jakes test";
+        return "Hello MetaVerse";
     }
 };
+
+
+const subscriptionName = "projects/metacx-prototype-a-196818/subscriptions/sample";
+//Read message from the queue and then write to big query
+const subscription = pubsub.subscription(subscriptionName);
+const timeout = 60;
+
+// Create an event handler to handle messages
+let messageCount = 0;
+const messageHandler = message => {
+    console.log(`Received message ${message.id}:`);
+    console.log(`\tData: ${message.data}`);
+    console.log(`\tAttributes: ${message.attributes}`);
+
+    table.insert(JSON.parse(message.data.toString('utf8')), insertHandler);
+
+    messageCount += 1;
+    message.ack();
+};
+
+// Listen for new messages until timeout is hit
+subscription.on(`message`, messageHandler);
+setTimeout(() => {
+    subscription.removeListener('message', messageHandler);
+    console.log(`${messageCount} message(s) received.`);
+}, timeout * 1000);
 
 
 app.use('/graphql', graphqlHTTP({
